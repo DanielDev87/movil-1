@@ -2,6 +2,7 @@ import { initializeApp } from "firebase/app";
 import { 
   initializeAuth, 
   getReactNativePersistence,
+  browserLocalPersistence,
   onAuthStateChanged,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
@@ -21,11 +22,13 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 
+const isWeb = typeof window !== 'undefined' && typeof window.document !== 'undefined';
 
 const auth = initializeAuth(app, {
-  persistence: getReactNativePersistence(ReactNativeAsyncStorage)
+  persistence: isWeb
+    ? browserLocalPersistence
+    : getReactNativePersistence(ReactNativeAsyncStorage)
 });
-
 
 export { 
   auth,
